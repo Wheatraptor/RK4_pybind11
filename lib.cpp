@@ -5,14 +5,14 @@ double f1(double v2) {
 }
 
 double f2(double v1, double v2, double c, double k, double ks, double m) {
-	return (-c * v2 + k * v1 + ks * pow(v1, 3)) / m;
+	return (-c * v2 - k * v1 - ks * pow(v1, 3)) / m;
 }
 
 vector<double> var1(double v1, double v2, double c, double k, double ks, double m) {
 	vector<double> vect;
 	double k1 = f1(v2);
 	double l1 = f2(v1, v2, c, k, ks, m);
-	vect.insert(vect.end(), {k1, l1});
+	vect.insert(vect.end(), { k1, l1 });
 	return vect;
 }
 
@@ -73,7 +73,6 @@ vector<vector<double>> rk4(double m, double k, double c, double ks, double v1, d
 		vn2 = vn2 + (h / 6) * (l1 + 2 * l2 + 2 * l3 + l4);
 		n++;
 		table.insert(table.end(), { n, h, xn, vn1, vn2, vn1d, vn2d });
-	}
-	while (((mode == true) && (n < limit)) || ((mode == false) && (xn < limit)));
+	} while (((mode == true) && (n < limit)) || ((mode == false) && (xn < limit)));
 	return table;
 }
