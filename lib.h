@@ -15,4 +15,4 @@ vector<double> var3(double v1, double v2, double c, double k, double ks, double 
 
 vector<double> var4(double v1, double v2, double c, double k, double ks, double m, double h, double k3, double l3);
 
-vector<vector<double>> rk4(double h, double m, double k, double c, double ks, double v1, double v2, bool mode, bool control, double control_val, double limit);
+vector<vector<double>> rk4(double m, double k, double c, double ks, double v1, double v2, double step, double max_steps, bool control, double control_val, double limit, double limit_acc);
