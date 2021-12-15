@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QAbstractTableModel, Qt
 from runner import create_df, saveplots, empty_df
+from dialog import Ui_Dialog as InfoForm
+from stats import Ui_Form as StatForm
 
 ppi = 93
 
@@ -396,8 +398,10 @@ class Ui_MainWindow(object):
         self.action_4 = QtWidgets.QAction(MainWindow)
         self.action_4.setObjectName("action_4")
         self.action_5 = QtWidgets.QAction(MainWindow)
+        self.action_5.triggered.connect(self.open_stats)
         self.action_5.setObjectName("action_5")
         self.action_6 = QtWidgets.QAction(MainWindow)
+        self.action_6.triggered.connect(self.open_dialog)
         self.action_6.setObjectName("action_6")
         self.menu.addAction(self.action)
         self.menu.addAction(self.action_3)
@@ -405,7 +409,6 @@ class Ui_MainWindow(object):
         self.menu_2.addAction(self.action_6)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
-
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
@@ -443,6 +446,8 @@ class Ui_MainWindow(object):
         self.action_4.setText(_translate("MainWindow", "Справка"))
         self.action_5.setText(_translate("MainWindow", "Справка"))
         self.action_6.setText(_translate("MainWindow", "Описание задачи"))
+        self.action_6.setShortcut(_translate("MainWindow", "Ctrl+I"))
+
     
     def clickBox(self, state):
 
@@ -477,6 +482,7 @@ class Ui_MainWindow(object):
             self.label_25.setPixmap(QtGui.QPixmap("blank.png"))
             self.label_26.setPixmap(QtGui.QPixmap("blank.png"))
             df = create_df(m, k, c, ks, v1, v2, step, max_steps, self.control, control_val, limit, limit_acc)
+
 
             self.ax1.plot(df['vn2'], df['vn1'])
             self.fig1.savefig('both.png')
@@ -541,6 +547,36 @@ class Ui_MainWindow(object):
         self.lineEdit_7.setText('')
         self.lineEdit_9.setText('')
         self.lineEdit_12.setText('')
+
+    def open_dialog(self):
+        dialog = QtWidgets.QDialog()
+        dialog.ui = InfoForm()
+        dialog.ui.setupUi(dialog)
+        dialog.exec_()
+        dialog.show()
+
+    def open_stats(self):
+        dialog = QtWidgets.QDialog()
+        dialog.ui = StatForm()
+        dialog.ui.setupUi(dialog)
+        dialog.ui.label_2.setText(self.lineEdit_2.text())
+        dialog.ui.label.setText(self.lineEdit_3.text())
+        dialog.ui.label_8.setText(self.lineEdit_5.text())
+        dialog.ui.label_9.setText(self.lineEdit.text())
+        dialog.ui.label_12.setText(self.lineEdit_8.text())
+        dialog.ui.label_13.setText(self.lineEdit_11.text())
+        if self.control == True:
+            dialog.ui.label_15.setText('Да')
+        else:
+            dialog.ui.label_15.setText('Нет')
+        dialog.ui.label_17.setText(self.lineEdit_7.text())
+        dialog.ui.label_19.setText(self.lineEdit_9.text())
+        dialog.ui.label_20.setText(self.lineEdit_12.text())
+        dialog.ui.label_24.setText(self.lineEdit_13.text())
+        dialog.ui.label_22.setText(self.lineEdit_10.text())
+        dialog.ui.label_28.setText()
+        dialog.exec_()
+        dialog.show()
 
 class PandasModel(QAbstractTableModel):
 
