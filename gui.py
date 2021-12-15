@@ -1,10 +1,13 @@
 from numpy import empty
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QAbstractTableModel, Qt
 from runner import create_df, saveplots, empty_df
+
+ppi = 93
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -13,6 +16,19 @@ class Ui_MainWindow(object):
         MainWindow.setTabShape(QtWidgets.QTabWidget.Rounded)
 
         self.control = False    
+
+        self.fig1, self.ax1 = plt.subplots(figsize=(551/ppi, 350/ppi))
+        self.ax1.set_ylabel('Vn₂', fontsize='large')
+        self.ax1.set_xlabel('Vn₁', fontsize='large')
+        self.fig2, self.ax2 = plt.subplots(figsize=(551/ppi, 350/ppi))
+        self.ax2.set_ylabel('Vn₂', fontsize='large')
+        self.ax2.set_xlabel('Xn', fontsize='large')
+        self.fig3, self.ax3 = plt.subplots(figsize=(551/ppi, 350/ppi))
+        self.ax3.set_ylabel('Vn₁', fontsize='large')
+        self.ax3.set_xlabel('Xn', fontsize='large')
+        self.fig1.savefig('both.png')
+        self.fig2.savefig('vn2.png')
+        self.fig3.savefig('vn1.png')
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -400,7 +416,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "11.3 Балашов 381903-3"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "Vn₁ ( xₙ )"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Vn₂ ( xₙ )"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Vn₁ ( Vn₂ )"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Vn₂ ( Vn₁ )"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Параметры задачи Коши"))
         self.label_9.setText(_translate("MainWindow", "u\'(0)"))
         self.label_8.setText(_translate("MainWindow", "u(0), см"))
@@ -462,7 +478,15 @@ class Ui_MainWindow(object):
             self.label_26.setPixmap(QtGui.QPixmap("blank.png"))
             df = create_df(m, k, c, ks, v1, v2, step, max_steps, self.control, control_val, limit, limit_acc)
 
-            saveplots(df)
+            self.ax1.plot(df['vn2'], df['vn1'])
+            self.fig1.savefig('both.png')
+
+            self.ax2.plot(df['xn'], df['vn1'])
+            self.fig2.savefig('vn2.png')
+
+            self.ax3.plot(df['xn'], df['vn2'])
+            self.fig3.savefig('vn1.png')
+
             model = PandasModel(df)
             self.tableView.setModel(model)
             self.label_24.setPixmap(QtGui.QPixmap("vn1.png"))
@@ -480,6 +504,9 @@ class Ui_MainWindow(object):
         df = empty_df()
         model = PandasModel(df)
         self.tableView.setModel(model)
+        self.ax1.clear()
+        self.ax2.clear()
+        self.ax3.clear()
         self.label_24.setPixmap(QtGui.QPixmap("blank.png"))
         self.label_25.setPixmap(QtGui.QPixmap("blank.png"))
         self.label_26.setPixmap(QtGui.QPixmap("blank.png"))
@@ -487,14 +514,14 @@ class Ui_MainWindow(object):
     def fill(self):
         self.checkBox.setChecked(True)
         self.control = True
-        self.lineEdit_5.setText('5')
+        self.lineEdit_5.setText('0.1')
         self.lineEdit_2.setText('2')
         self.lineEdit.setText('0.15')
         self.lineEdit_3.setText('2')
         self.lineEdit_8.setText('10')
         self.lineEdit_11.setText('0')
-        self.lineEdit_13.setText('0.1')
-        self.lineEdit_10.setText('1000')
+        self.lineEdit_13.setText('0.001')
+        self.lineEdit_10.setText('10000')
         self.lineEdit_7.setText('0.0001')
         self.lineEdit_9.setText('20')
         self.lineEdit_12.setText('0.001')

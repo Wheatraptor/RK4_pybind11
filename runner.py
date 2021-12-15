@@ -6,7 +6,10 @@ from rk4s import rk4
 
 def create_df(m, k, c, ks, v1, v2, step, max_steps, control, control_val, limit, limit_acc):
     table = np.array(rk4(m, k, c, ks, v1, v2, step, max_steps, control, control_val, limit, limit_acc))
-    df = pd.DataFrame(data=table, columns=['n', 'hn-1', 'xn', 'vn1', 'vn2', 'vn1d', 'vn2d', 'S*', 'повышение', 'понижение'])
+    df = pd.DataFrame(data=table, columns=['n', 'hn-1', 'xn', 'vn1', 'vn2', 'vn1d', 'vn2d', 'S1', 'S2', 'S*', 'повышение', 'понижение'])
+    df['n'] = list(map(int, df['n']))
+    df['повышение'] = list(map(int, df['повышение']))
+    df['понижение'] = list(map(int, df['понижение']))
     return df
 
 def saveplots(df):
@@ -21,7 +24,7 @@ def saveplots(df):
     plt.clf()
 
 def empty_df():
-    df = pd.DataFrame(data=None, columns=['n', 'hn-1', 'xn', 'vn1', 'vn2', 'vn1d', 'vn2d', 'S*', 'повышение', 'понижение'])
+    df = pd.DataFrame(data=None, columns=['n', 'hn-1', 'xn', 'vn1', 'vn2', 'vn1d', 'vn2d', 'S1', 'S2', 'S*', 'повышение', 'понижение'])
     return df
 # print(df.tail(50))
 # plt.plot(df['vn1'], df['vn2'])
